@@ -1,14 +1,24 @@
 package com.bookMyTicket.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-@Getter
-@Setter
+@Entity(name = "users")
+@Data
+@NoArgsConstructor
 public class UserEntity {
-    Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(nullable = false)
+    private Long id;
+
     String name;
-    Integer mobileNumber;
-    String email;
+
+    @NonNull
+    private Integer mobileNumber;
+
+    private String email;
     //todo add user type as well
 }

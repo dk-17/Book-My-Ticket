@@ -34,4 +34,4 @@ build/
 
 
 # Exclude .db files
-*.db
+*.mv.db

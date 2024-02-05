@@ -12,16 +12,4 @@ import java.util.Map;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-//    Map<Integer, UserEntity> users = new HashMap<>();
-//
-//    public UserEntity registerUser(UserRequestDto userRequestDto) {
-//        //todo validation of unique mobile number or exiting user
-//        UserEntity user = new UserEntity();
-//        user.setName(userRequestDto.getName());
-//        user.setEmail(userRequestDto.getEmail());
-//        user.setMobileNumber(userRequestDto.getMobileNumber());
-////        users.put(user.getId(), user);
-//
-//        return user;
-//    }
 }

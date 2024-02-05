@@ -16,8 +16,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserEntity> addNotesForTask(
-            @RequestBody UserRequestDto userRequestDto
-    ) {
+            @RequestBody UserRequestDto userRequestDto) {
         UserEntity user = userService.registerUser(userRequestDto);
         return ResponseEntity.ok(user);
     }

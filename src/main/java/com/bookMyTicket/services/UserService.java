@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public UserEntity registerUser(UserRequestDto userDto) {
         UserEntity user = new UserEntity();

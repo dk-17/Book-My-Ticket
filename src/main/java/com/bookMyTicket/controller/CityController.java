@@ -26,7 +26,7 @@ public class CityController {
 
     @GetMapping("/cities")
     public ResponseEntity< List<CityEntity>> getCities(
-            @RequestParam String state) {
+            @RequestParam(required = true) String state) {
         List<CityEntity> cities = cityService.getCities(state);
         return ResponseEntity.ok(cities);
     }

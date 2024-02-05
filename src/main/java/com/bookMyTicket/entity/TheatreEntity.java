@@ -5,20 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-@Entity(name = "users")
+@Entity(name = "theatres")
 @Data
 @NoArgsConstructor
-public class UserEntity {
+public class TheatreEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
 
     private String name;
-
     @NonNull
-    private Integer mobileNumber;
-
-    private String email;
-    //todo add user type as well
+    private Long cityId;
+    private String address;
+    private Integer numberOfScreen;
 }

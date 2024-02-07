@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "Cities")
+@Entity(name = "cities")
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "state"})
+)
 @Data
 @NoArgsConstructor
 public class CityEntity {
@@ -13,7 +16,9 @@ public class CityEntity {
     @Column(nullable = false)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String state;
 }

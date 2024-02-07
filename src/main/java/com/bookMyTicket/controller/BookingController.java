@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/booking")
 public class BookingController {
@@ -20,9 +22,16 @@ public class BookingController {
         return ResponseEntity.ok(booking);
     }
 
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<Optional<BookingEntity>> getBookingDetails(
+            @PathVariable Long bookingId){
+        Optional<BookingEntity> booking = bookingService.getBookingDetails(bookingId);
+        return ResponseEntity.ok(booking);
+    }
+
     @DeleteMapping("/{bookingId}")
     public ResponseEntity<Long> deleteBooking(
-            @RequestParam Long bookingId){
+            @PathVariable Long bookingId){
         bookingService.deleteBooking(bookingId);
         return ResponseEntity.ok(bookingId);
     }

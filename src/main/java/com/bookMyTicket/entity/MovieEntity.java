@@ -16,6 +16,7 @@ public class MovieEntity {
     @Column(nullable = false)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String description;
@@ -26,3 +27,4 @@ public class MovieEntity {
 
     private List<String> languages;
 }
+

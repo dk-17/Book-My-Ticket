@@ -10,6 +10,9 @@ import java.util.Date;
 @Entity(name = "movieShow")
 @Data
 @NoArgsConstructor
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"screenId", "theatreId", "startTime"})
+})
 public class MovieShowEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

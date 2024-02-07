@@ -5,9 +5,11 @@ import com.bookMyTicket.entity.BookingEntity;
 import com.bookMyTicket.entity.MovieShowEntity;
 import com.bookMyTicket.repository.BookingRepository;
 import com.bookMyTicket.repository.MovieShowRepository;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -21,8 +23,10 @@ public class BookingService {
     private MovieShowRepository movieShowRepository;
 
     @Autowired
-    private MovieShowService movieShowService;
+    private MovieService movieService;
 
+    @Transactional
+    @Synchronized
     public BookingEntity createBooking(BookingDto bookingDto) {
         // validate the seats are available or not,
         Optional<MovieShowEntity> optionalMovieShow = movieShowRepository.findById(bookingDto.getShowId());
@@ -48,14 +52,17 @@ public class BookingService {
 
         bookingRepository.save(booking);
 
-        movieShowService.updateAvailableSeats(bookingDto.getShowId(), booking.getNumberOfSeats());
+        movieService.updateAvailableSeats(bookingDto.getShowId(), booking.getNumberOfSeats());
 
         return booking;
 
     }
 
+    public Optional<BookingEntity> getBookingDetails(Long bookingId) {
+        return bookingRepository.findById(bookingId);
+    }
+
     public Long deleteBooking(Long bookingId) {
-        // validate booking info,
         Optional<BookingEntity> optionalBookingEntity = bookingRepository.findById(bookingId);
         if (optionalBookingEntity.isPresent()) {
             BookingEntity booking = optionalBookingEntity.get();

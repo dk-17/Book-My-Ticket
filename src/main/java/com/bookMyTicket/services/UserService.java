@@ -2,8 +2,8 @@ package com.bookMyTicket.services;
 
 import com.bookMyTicket.dto.UserDto;
 import com.bookMyTicket.entity.UserEntity;
-import com.bookMyTicket.exception.DuplicateMobileNumberException;
-import com.bookMyTicket.exception.UserNotFoundException;
+import com.bookMyTicket.exception.DuplicateEntityException;
+import com.bookMyTicket.exception.NotFoundException;
 import com.bookMyTicket.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class UserService {
             log.info("{} register successfully", userDto.getName());
         } catch (DataIntegrityViolationException e) {
             //TODO - check its giving 500 is it right status code?
-            throw new DuplicateMobileNumberException("User with mobile number " + user.getMobileNumber() + " already exists");
+            throw new DuplicateEntityException("User with mobile number " + user.getMobileNumber() + " already exists");
         }
 
         return user;
@@ -38,7 +38,7 @@ public class UserService {
     public UserEntity getUser(Long userId) {
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException("User not found with ID: " + userId);
+            throw new NotFoundException("User not found with ID: " + userId);
         }
         return optionalUser.get();
     }

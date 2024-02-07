@@ -3,23 +3,18 @@ package com.bookMyTicket.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-@Entity(name = "users")
+@Entity(name = "screens")
 @Data
 @NoArgsConstructor
-public class UserEntity {
+public class ScreensEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
 
-    private String name;
+    private Long theatreId;
 
-    @NonNull
-    @Column(unique = true) // Make mobileNumber unique
-    private Integer mobileNumber;
+    private Integer numberOfSeats;
 
-    private String email;
-    //todo add user type as well
 }

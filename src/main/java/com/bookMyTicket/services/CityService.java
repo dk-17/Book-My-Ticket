@@ -1,6 +1,6 @@
 package com.bookMyTicket.services;
 
-import com.bookMyTicket.dto.request.CityDto;
+import com.bookMyTicket.dto.CityDto;
 import com.bookMyTicket.entity.CityEntity;
 import com.bookMyTicket.repository.CityRepository;
 import lombok.extern.slf4j.Slf4j;

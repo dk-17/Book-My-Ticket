@@ -1,4 +1,4 @@
-package com.bookMyTicket.dto.request;
+package com.bookMyTicket.dto;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;

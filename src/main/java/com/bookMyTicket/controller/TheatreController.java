@@ -1,7 +1,7 @@
 package com.bookMyTicket.controller;
 
 
-import com.bookMyTicket.dto.request.TheatreDto;
+import com.bookMyTicket.dto.TheatreDto;
 import com.bookMyTicket.entity.TheatreEntity;
 import com.bookMyTicket.services.TheatreService;
 import org.springframework.beans.factory.annotation.Autowired;

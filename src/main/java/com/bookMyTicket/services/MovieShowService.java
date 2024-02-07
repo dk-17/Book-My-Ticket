@@ -1,10 +1,7 @@
 package com.bookMyTicket.services;
 
-import com.bookMyTicket.dto.MovieDto;
 import com.bookMyTicket.dto.MovieShowDto;
-import com.bookMyTicket.entity.MovieEntity;
 import com.bookMyTicket.entity.MovieShowEntity;
-import com.bookMyTicket.repository.MovieRepository;
 import com.bookMyTicket.repository.MovieShowRepository;
 import com.bookMyTicket.repository.ScreenRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,36 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Slf4j
 @Service
-public class MovieService {
-    @Autowired
-    private MovieRepository movieRepository;
-
+public class MovieShowService {
     @Autowired
     private MovieShowRepository movieShowRepository;
 
     @Autowired
     private ScreenRepository screenRepository;
-
-    public MovieEntity addMovie(MovieDto movieDto){
-        MovieEntity movie = new MovieEntity();
-        movie.setName(movieDto.getName());
-        movie.setDescription(movieDto.getDescription());
-        movie.setReleaseDate(movieDto.getReleaseDate());
-        movie.setLanguages(movieDto.getLanguages());
-        movie.setDuration(movie.getDuration());
-
-        movieRepository.save(movie);
-
-        return movie;
-    }
-
-//    public List<MovieEntity> getMovies(Long cityId, Long theatreId){
-//        return  movieRepository.findByCityId(cityId);
-//
-//    }
 
     public MovieShowEntity addMovieShow(MovieShowDto movieShowDto) {
         MovieShowEntity movieShow = new MovieShowEntity();
@@ -62,7 +37,7 @@ public class MovieService {
         return movieShowRepository.findByMovieIdAndTheatreId(movieId, theatreId);
     }
 
-    public Optional<MovieShowEntity> getMovieShowDetails(Long showId) {
+    public  Optional<MovieShowEntity> getMovieShowDetails(Long showId) {
         Optional<MovieShowEntity> movieShow = movieShowRepository.findById(showId);
         return movieShow;
     }
@@ -76,6 +51,8 @@ public class MovieService {
 
         MovieShowEntity movieShow = optionalMovieShow.orElseThrow(() -> new RuntimeException("MovieShowEntity not found"));
         movieShow.setAvailableSeats(numberOfSeatsAvailable);
+
+        movieShowRepository.save(movieShow);
 
         return movieShow;
     }

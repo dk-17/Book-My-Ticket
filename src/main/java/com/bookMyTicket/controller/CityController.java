@@ -1,6 +1,6 @@
 package com.bookMyTicket.controller;
 
-import com.bookMyTicket.dto.request.CityDto;
+import com.bookMyTicket.dto.CityDto;
 import com.bookMyTicket.entity.CityEntity;
 import com.bookMyTicket.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.bookMyTicket.dto.request;
+package com.bookMyTicket.dto;
 
 
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequestDto {
+public class UserDto {
     private String name;
     @NonNull
     private Integer mobileNumber;

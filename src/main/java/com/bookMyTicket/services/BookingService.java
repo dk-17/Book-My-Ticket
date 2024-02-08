@@ -61,6 +61,8 @@ public class BookingService {
         return optionalBookingEntity.orElseThrow(() -> new NotFoundException("Booking not found with id " + bookingId));
     }
 
+    @Transactional
+    @Synchronized
     public  BookingEntity  deleteBooking(Long bookingId) throws NotFoundException {
         //TODO: validate that booking can be cancel only before show start time.
         Optional<BookingEntity> optionalBookingEntity = bookingRepository.findById(bookingId);

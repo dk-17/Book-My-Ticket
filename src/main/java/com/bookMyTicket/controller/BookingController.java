@@ -30,9 +30,9 @@ public class BookingController {
     }
 
     @DeleteMapping("/{bookingId}")
-    public ResponseEntity<Long> deleteBooking(
+    public ResponseEntity<BookingEntity> deleteBooking(
             @PathVariable Long bookingId){
-        bookingService.deleteBooking(bookingId);
-        return ResponseEntity.ok(bookingId);
+        BookingEntity bookginDetails = bookingService.deleteBooking(bookingId);
+        return ResponseEntity.ok(bookginDetails);
     }
 }

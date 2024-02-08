@@ -61,17 +61,32 @@ public class BookingService {
         return optionalBookingEntity.orElseThrow(() -> new NotFoundException("Booking not found with id " + bookingId));
     }
 
-    public Long deleteBooking(Long bookingId) throws NotFoundException {
+    public  BookingEntity  deleteBooking(Long bookingId) throws NotFoundException {
+        //TODO: validate that booking can be cancel only before show start time.
         Optional<BookingEntity> optionalBookingEntity = bookingRepository.findById(bookingId);
         if (optionalBookingEntity.isPresent()) {
             BookingEntity booking = optionalBookingEntity.get();
+            Long showId = booking.getShowId();
+            Integer numberOfSeats = booking.getNumberOfSeats();
+
             bookingRepository.delete(booking);
             log.info("Booking is canceled with id {}", bookingId);
+
+            Optional<MovieShowEntity> optionalMovieShowEntity = movieShowRepository.findById(showId);
+            if (optionalMovieShowEntity.isPresent()) {
+                MovieShowEntity movieShowEntity = optionalMovieShowEntity.get();
+                Integer currentAvailableSeats = movieShowEntity.getAvailableSeats();
+                movieShowEntity.setAvailableSeats(currentAvailableSeats + numberOfSeats);
+                movieShowRepository.save(movieShowEntity);
+                log.info("{} seats are now available for show {}", numberOfSeats, showId);
+            } else {
+                throw new NotFoundException("Movie show with id " + showId + " not found");
+            }
         } else {
-            throw new NotFoundException("booking with this id " + bookingId + " is not present");
+            throw new NotFoundException("Booking with id " + bookingId + " not found");
         }
 
-        return bookingId;
-
+        return optionalBookingEntity.get();
     }
+
 }

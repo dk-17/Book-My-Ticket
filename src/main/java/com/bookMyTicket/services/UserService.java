@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserEntity registerUser(UserDto userDto) {
+    public UserEntity registerUser(UserDto userDto) throws DuplicateEntityException {
         UserEntity user = new UserEntity();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
@@ -28,14 +28,13 @@ public class UserService {
             userRepository.save(user);
             log.info("{} register successfully", userDto.getName());
         } catch (DataIntegrityViolationException e) {
-            //TODO - check its giving 500 is it right status code?
             throw new DuplicateEntityException("User with mobile number " + user.getMobileNumber() + " already exists");
         }
 
         return user;
     }
 
-    public UserEntity getUser(Long userId) {
+    public UserEntity getUser(Long userId) throws NotFoundException {
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
             throw new NotFoundException("User not found with ID: " + userId);

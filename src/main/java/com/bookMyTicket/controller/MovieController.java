@@ -60,9 +60,9 @@ public class MovieController {
     }
 
     @GetMapping("/show/{showId}")
-    public ResponseEntity< Optional<MovieShowEntity>> getMovieShowsDetails(
+    public ResponseEntity<MovieShowEntity> getMovieShowsDetails(
             @PathVariable Long showId) {
-        Optional<MovieShowEntity> movieShows = movieService.getMovieShowDetails(showId);
+        MovieShowEntity movieShows = movieService.getMovieShowDetails(showId);
         return ResponseEntity.ok(movieShows);
     }
 }

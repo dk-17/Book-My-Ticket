@@ -23,9 +23,9 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Optional<BookingEntity>> getBookingDetails(
+    public ResponseEntity<BookingEntity> getBookingDetails(
             @PathVariable Long bookingId){
-        Optional<BookingEntity> booking = bookingService.getBookingDetails(bookingId);
+        BookingEntity booking = bookingService.getBookingDetails(bookingId);
         return ResponseEntity.ok(booking);
     }
 

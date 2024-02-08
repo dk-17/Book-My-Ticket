@@ -36,7 +36,7 @@ public class MovieService {
     @Autowired
     private ScreenRepository screenRepository;
 
-    public MovieEntity addMovie(MovieDto movieDto) {
+    public MovieEntity addMovie(MovieDto movieDto) throws DuplicateEntityException {
         if (movieRepository.existsByName(movieDto.getName())) {
             throw new DuplicateEntityException("Movie with name '" + movieDto.getName() + "' already exists.");
         }
@@ -55,8 +55,7 @@ public class MovieService {
         return movie;
     }
 
-
-    public List<MovieEntity> getMovies(Long cityId) {
+    public List<MovieEntity> getMovies(Long cityId) throws NotFoundException {
         List<TheatreEntity> theatres = theatreRepository.findTheatreIdsByCityId(cityId);
         List<Long> theatreIds = theatres.stream().map(TheatreEntity::getId).collect(Collectors.toList());
 
@@ -79,20 +78,18 @@ public class MovieService {
             }
         }
 
+        if (movies.isEmpty()) {
+            throw new NotFoundException("No movies found for the given city");
+        }
+
         return movies;
     }
 
-    public MovieEntity getMovieById(Long movieId) {
-        Optional<MovieEntity> optionalMovieEntity = movieRepository.findById(movieId);
-        if (optionalMovieEntity.isEmpty()) {
-            throw new NotFoundException("Movie not found with id " + movieId);
-        }
-
-        return optionalMovieEntity.get();
+    public MovieEntity getMovieById(Long movieId) throws NotFoundException {
+        return movieRepository.findById(movieId)
+                .orElseThrow(() -> new NotFoundException("Movie not found with ID: " + movieId));
     }
-
-
-    public MovieShowEntity addMovieShow(MovieShowDto movieShowDto) {
+    public MovieShowEntity addMovieShow(MovieShowDto movieShowDto) throws DuplicateEntityException {
         MovieShowEntity movieShow = new MovieShowEntity();
         movieShow.setMovieId(movieShowDto.getMovieId());
         movieShow.setScreenId(movieShowDto.getScreenId());
@@ -112,7 +109,7 @@ public class MovieService {
     }
 
 
-    public List<MovieShowEntity> getMovieShows(Long movieId, Long cityId) {
+    public List<MovieShowEntity> getMovieShows(Long movieId, Long cityId) throws NotFoundException {
         List<TheatreEntity> theatres = theatreRepository.findTheatreIdsByCityId(cityId);
         List<Long> theatreIds = theatres.stream().map(TheatreEntity::getId).collect(Collectors.toList());
 
@@ -122,22 +119,26 @@ public class MovieService {
             List<MovieShowEntity> movieShowsByTheatreId = movieShowRepository.findByMovieIdAndTheatreId(movieId, theatreId);
             movieShows.addAll(movieShowsByTheatreId);
         }
+        if (movieShows.isEmpty()) {
+            throw new NotFoundException("No movie shows found for movie ID " + movieId + " and city ID " + cityId);
+        }
 
         return movieShows;
     }
 
-    public Optional<MovieShowEntity> getMovieShowDetails(Long showId) {
-        return movieShowRepository.findById(showId);
+    public MovieShowEntity getMovieShowDetails(Long showId) throws NotFoundException {
+        return movieShowRepository.findById(showId)
+                .orElseThrow(() -> new NotFoundException("Movie show not found with ID: " + showId));
     }
 
-    public  MovieShowEntity updateAvailableSeats(Long showId, Integer numberOfSeats) {
+    public  MovieShowEntity updateAvailableSeats(Long showId, Integer numberOfSeats) throws NotFoundException {
         Optional<MovieShowEntity> optionalMovieShow = movieShowRepository.findById(showId);
 
         Long screenId = optionalMovieShow.map(MovieShowEntity::getScreenId).orElse(null);
         Integer totalNumberOfSeats = screenRepository.findById(screenId).get().getNumberOfSeats();
         Integer numberOfSeatsAvailable = totalNumberOfSeats - numberOfSeats;
 
-        MovieShowEntity movieShow = optionalMovieShow.orElseThrow(() -> new RuntimeException("MovieShowEntity not found"));
+        MovieShowEntity movieShow = optionalMovieShow.orElseThrow(() -> new NotFoundException("MovieShowEntity not found"));
         movieShow.setAvailableSeats(numberOfSeatsAvailable);
 
         movieShowRepository.save(movieShow);

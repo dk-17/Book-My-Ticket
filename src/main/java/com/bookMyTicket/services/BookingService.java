@@ -3,6 +3,8 @@ package com.bookMyTicket.services;
 import com.bookMyTicket.dto.BookingDto;
 import com.bookMyTicket.entity.BookingEntity;
 import com.bookMyTicket.entity.MovieShowEntity;
+import com.bookMyTicket.exception.NotFoundException;
+import com.bookMyTicket.exception.SeatsNotAvailableException;
 import com.bookMyTicket.repository.BookingRepository;
 import com.bookMyTicket.repository.MovieShowRepository;
 import lombok.Synchronized;
@@ -27,21 +29,17 @@ public class BookingService {
 
     @Transactional
     @Synchronized
-    public BookingEntity createBooking(BookingDto bookingDto) {
-        // validate the seats are available or not,
+    public BookingEntity createBooking(BookingDto bookingDto) throws SeatsNotAvailableException, NotFoundException {
         Optional<MovieShowEntity> optionalMovieShow = movieShowRepository.findById(bookingDto.getShowId());
         if (optionalMovieShow.isPresent()) {
             MovieShowEntity movieShowEntity = optionalMovieShow.get();
             Integer availableSeats = movieShowEntity.getAvailableSeats();
 
             if(bookingDto.getNumberOfSeats() > availableSeats) {
-                //throw exception as seats are full;
-                log.error("{} number of seats are not available", availableSeats);
+                throw new SeatsNotAvailableException(availableSeats + " number of seats are not available for the show");
             }
-            // Use the availableSeats value as needed
         } else {
-            //TODO: throw exception
-            log.error("Show is not available with id");
+            throw new NotFoundException("Show is not available");
         }
 
         BookingEntity booking = new BookingEntity();
@@ -58,8 +56,9 @@ public class BookingService {
 
     }
 
-    public Optional<BookingEntity> getBookingDetails(Long bookingId) {
-        return bookingRepository.findById(bookingId);
+    public BookingEntity getBookingDetails(Long bookingId) {
+        Optional<BookingEntity> optionalBookingEntity = bookingRepository.findById(bookingId);
+        return optionalBookingEntity.orElseThrow(() -> new NotFoundException("Booking not found with id " + bookingId));
     }
 
     public Long deleteBooking(Long bookingId) {

@@ -56,20 +56,19 @@ public class BookingService {
 
     }
 
-    public BookingEntity getBookingDetails(Long bookingId) {
+    public BookingEntity getBookingDetails(Long bookingId) throws NotFoundException {
         Optional<BookingEntity> optionalBookingEntity = bookingRepository.findById(bookingId);
         return optionalBookingEntity.orElseThrow(() -> new NotFoundException("Booking not found with id " + bookingId));
     }
 
-    public Long deleteBooking(Long bookingId) {
+    public Long deleteBooking(Long bookingId) throws NotFoundException {
         Optional<BookingEntity> optionalBookingEntity = bookingRepository.findById(bookingId);
         if (optionalBookingEntity.isPresent()) {
             BookingEntity booking = optionalBookingEntity.get();
             bookingRepository.delete(booking);
             log.info("Booking is canceled with id {}", bookingId);
         } else {
-            //TODO: throw exception
-            log.error("booking with this id {} is not present", bookingId);
+            throw new NotFoundException("booking with this id " + bookingId + " is not present");
         }
 
         return bookingId;
